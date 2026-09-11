@@ -10,6 +10,7 @@ build/
 coverage/
 
 # Local preview / tool state
+.impeccable/
 .impeccable/review/
 .impeccable/mocks/
 .impeccable/config.local.json
