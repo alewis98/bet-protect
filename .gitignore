@@ -1,0 +1,20 @@
+# OS / editor noise
+.DS_Store
+.idea/
+.vscode/
+
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
+
+# Local preview / tool state
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/config.local.json
+
+# Local environment files
+.env
+.env.*
+!.env.example
