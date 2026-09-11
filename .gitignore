@@ -18,3 +18,8 @@ coverage/
 .env
 .env.*
 !.env.example
+
+# Agents
+.agents/
+.codex/
+.opencode/

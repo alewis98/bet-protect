@@ -9,7 +9,7 @@ function decimalOdds(value, format) {
 }
 function effectiveOdds(odds, format, boost) { const decimal = decimalOdds(odds, format); return 1 + (decimal - 1) * (1 + boost / 100); }
 function formatOdds(value, format) { if(format==='decimal') return value.toFixed(2); const american=value>=2 ? `+${Math.round((value-1)*100)}` : `${Math.round(-100/(value-1))}`; return american; }
-function updateBoostMath(side) { const odds=number(`odds-${side}`), odds2=number(`odds-${side}-2`), boost=number(`boost-${side}`)??0, format=$(`format-${side}`).value, target=$(`boost-math-${side}`); if(odds===null||odds2===null||(format==='decimal'&&(odds<=1||odds2<=1))||(format==='american'&&(Math.abs(odds)<100||Math.abs(odds2)<100))){ target.textContent='Boosted odds: — / —'; return; } target.textContent=`Boosted odds: ${formatOdds(effectiveOdds(odds,format,boost),format)} / ${formatOdds(effectiveOdds(odds2,format,boost),format)}`; }
+function updateBoostMath(side) { const odds=number(`odds-${side}`), odds2=number(`odds-${side}-2`), boost=number(`boost-${side}`)??0, format=$(`format-${side}`).value, firstTarget=$(`boosted-${side}-1`), secondTarget=$(`boosted-${side}-2`); if(odds===null||odds2===null||(format==='decimal'&&(odds<=1||odds2<=1))||(format==='american'&&(Math.abs(odds)<100||Math.abs(odds2)<100))){ firstTarget.textContent='—'; secondTarget.textContent='—'; return; } firstTarget.textContent=formatOdds(effectiveOdds(odds,format,boost),format); secondTarget.textContent=formatOdds(effectiveOdds(odds2,format,boost),format); }
 function roundTo(value, increment) { return Math.round((value + Number.EPSILON) / increment) * increment; }
 function candidate(a, b, oa, ob, increment) {
   const total = a + b; const payoutA = a * oa; const payoutB = b * ob;
