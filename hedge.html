@@ -34,8 +34,8 @@
       <section id="hedge-results" class="hedge-results" aria-live="polite" hidden>
         <div class="results-heading"><div><h2>Choose your balance</h2><p class="result-note">Each option shows the net result after the hedge stake.</p></div></div>
         <div id="hedge-options" class="hedge-options"></div>
-        <div class="panel hedge-chart-panel"><div class="section-heading"><div><h2>Profit by hedge stake</h2></div><span class="muted">Hover for exact values</span></div><div class="hedge-chart-wrap"><canvas id="hedge-chart" aria-label="Line chart comparing profit for each outcome as hedge stake changes"></canvas></div></div>
-        <div class="panel hedge-explainer"><div class="section-heading"><div><h2>How the hedge is calculated</h2></div><span class="muted">At settlement</span></div><p id="hedge-math" class="hedge-math"></p></div>
+        <div class="panel hedge-chart-panel"><div class="section-heading"><div><h2>Profit by hedge stake</h2></div><span class="muted">Click or drag to test a stake</span></div><div class="hedge-chart-wrap"><canvas id="hedge-chart" aria-label="Line chart comparing profit for each outcome as hedge stake changes"></canvas></div><div id="custom-stake-card" class="custom-stake-card" hidden></div></div>
+        <details class="panel hedge-explainer"><summary><strong>How the hedge is calculated</strong><span class="muted">Math details</span><span class="hedge-disclosure-icon" aria-hidden="true"></span></summary><div class="hedge-explainer-body"><p id="hedge-math" class="hedge-math"></p></div></details>
       </section>
       <footer><span>BET PROTECT / HEDGE</span><span>No accounts · No tracking · Runs in your browser</span></footer>
     </main>
