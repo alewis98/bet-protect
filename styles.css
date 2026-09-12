@@ -110,13 +110,18 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 .custom-stake-card > div { display:grid; gap:5px; }
 .custom-stake-card span { color:var(--muted); font:500 10px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; }
 .custom-stake-card strong { color:var(--ink); font:800 22px Manrope,sans-serif; letter-spacing:-.04em; }
+.custom-stake-card em { color:var(--green); font:600 10px 'DM Mono',monospace; font-style:normal; text-transform:uppercase; letter-spacing:.04em; }
 .custom-stake-card b { color:var(--green); font:700 13px 'DM Mono',monospace; }
-@media (max-width:760px) { .custom-stake-card { grid-template-columns:1fr 1fr; } }
+.custom-stake-warning { display:block; margin-top:4px; color:var(--coral-ink); font:600 11px 'DM Mono',monospace; }
+@media (max-width:760px) { .custom-stake-card { grid-template-columns:1fr 1fr; }.custom-stake-warning { grid-column:1/-1; grid-row:auto; } }
 .hedge-math { line-height: 1.8; }
 .hedge-chart-panel h2, .hedge-explainer h2 { margin: 0; font-size: 18px; letter-spacing: -.03em; }
+.hedge-chart-help { display:flex; align-items:center; gap:7px; color:var(--muted); font:500 10px 'DM Mono',monospace; }
+.hedge-chart-help .muted { margin-left:10px; }
+.hedge-region-key { width:14px; height:10px; display:inline-block; border:1px solid rgba(23,107,75,.18); background:rgba(188,233,212,.65); }
 .hedge-chart-panel .section-heading, .hedge-explainer .section-heading { margin-bottom: 0; }
 .hedge-explainer { padding-top: 22px; padding-bottom: 22px; }
-@media (max-width:760px) { .hedge-chart-panel { padding: 18px; }.hedge-chart-wrap { height: 18rem; margin-left: 0; margin-right: 0; } }
+@media (max-width:760px) { .hedge-chart-panel { padding: 18px; }.hedge-chart-panel .section-heading { align-items:flex-start; }.hedge-chart-help { flex-wrap:wrap; justify-content:flex-end; max-width:190px; text-align:right; }.hedge-chart-help .muted { width:100%; margin-left:0; }.hedge-chart-wrap { height: 18rem; margin-left: 0; margin-right: 0; } }
 .hedge-explainer { padding: 0; overflow: hidden; }
 .hedge-explainer summary { display:flex; align-items:center; gap:16px; padding:20px 24px; cursor:pointer; list-style:none; }
 .hedge-explainer summary::-webkit-details-marker { display:none; }
