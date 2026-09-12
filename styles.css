@@ -8,6 +8,7 @@ body::before { content:''; position:fixed; inset:0; pointer-events:none; opacity
 .shell { position:relative; max-width:1180px; margin:auto; padding:0 32px 44px; }
 .topbar { height:86px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
 .brand { display:flex; align-items:center; gap:10px; color:var(--ink); text-decoration:none; font-weight:700; letter-spacing:-.03em; font-size:17px; }
+.tool-link { color:var(--green); text-decoration:none; font:500 11px 'DM Mono',monospace; }.tool-link:hover { color:var(--coral-ink); }
 .brand-mark { display:grid; place-items:center; width:28px; height:28px; border:1px solid var(--ink); border-radius:50%; font-size:18px; line-height:1; }
 .status,.muted { color:var(--muted); font:500 11px 'DM Mono',monospace; letter-spacing:.02em; }
 .status { display:flex; align-items:center; gap:8px; }.status-dot { width:7px; height:7px; border-radius:50%; background:#43a976; }
@@ -61,4 +62,51 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 .math-breakdown span { font-size:11px; }
 .math-breakdown code { font-size:12px; line-height:1.55; }
 .pairing-row { line-height:1.45; }
+.hedge-intro { max-width:760px; }.hedge-form { margin-top:8px; }.hedge-input-grid { padding:24px; }.hedge-fields { display:grid; grid-template-columns:1fr 1fr; gap:17px 14px; }.hedge-bias { display:grid; grid-template-columns:1fr auto; gap:6px 18px; align-items:center; margin-top:24px; padding-top:20px; border-top:1px solid var(--line); }.hedge-bias p { margin:5px 0 0; color:var(--muted); font-size:13px; }.hedge-bias output { color:var(--green); font:600 12px 'DM Mono',monospace; text-align:right; }.hedge-bias input[type=range] { grid-column:1/-1; width:100%; min-height:0; height:6px; accent-color:var(--green); padding:0; border:0; background:var(--mint); box-shadow:none; }.bias-scale { grid-column:1/-1; display:flex; justify-content:space-between; color:var(--muted); font:500 10px 'DM Mono',monospace; }.hedge-input-grid > .calculate-button { margin-top:24px; }.hedge-input-grid > .error-message { margin:12px 0 0; }.hedge-results { padding-top:64px; animation:rise .45s ease-out both; }.hedge-options { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }.hedge-option { padding:22px; border:1px solid var(--line); border-radius:12px; background:#fff; box-shadow:var(--shadow); }.hedge-option.recommended { border-color:#9bd5b8; box-shadow:0 0 0 3px rgba(188,233,212,.48),var(--shadow); }.hedge-option-head { display:flex; justify-content:space-between; gap:12px; align-items:start; }.hedge-option-head p { margin:7px 0 0; color:var(--muted); font-size:12px; line-height:1.4; }.hedge-option-head strong { color:var(--green); font:800 27px Manrope,sans-serif; letter-spacing:-.05em; }.hedge-outcomes { display:grid; gap:10px; margin-top:24px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }.hedge-outcomes span { display:flex; justify-content:space-between; gap:10px; }.hedge-outcomes b { color:var(--ink); font:700 12px 'DM Mono',monospace; }.hedge-explainer { margin-top:12px; padding:24px; }.hedge-math { margin:0; color:var(--green); font:500 13px/1.7 'DM Mono',monospace; }
+@media (max-width:760px) { .hedge-fields,.hedge-options { grid-template-columns:1fr; }.hedge-input-grid,.hedge-explainer { padding:18px; } }
 @media (max-width:390px) { .field-grid { grid-template-columns:1fr; }.field.full { grid-column:auto; }.control-fields { display:grid; grid-template-columns:1fr; }.intro h1 { font-size:46px; } }
+.hedge-chart-panel { margin-top: 1.25rem; }
+.hedge-chart-wrap { position: relative; height: 22rem; margin: 1.25rem 1rem .25rem; }
+.hedge-option.unavailable { opacity: .72; }
+.hedge-option[data-strategy] { cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.hedge-option[data-strategy] { position: relative; isolation: isolate; overflow: hidden; }
+.hedge-option[data-strategy] > * { position: relative; z-index: 1; }
+.hedge-option[data-strategy]::before { content:''; position:absolute; z-index:0; top:-55%; bottom:-55%; left:-28%; width:18%; opacity:0; transform:skewX(-18deg) translateX(0); pointer-events:none; }
+.hedge-option.current::before { background:var(--coral); }
+.hedge-option.balanced::before { background:var(--mint); }
+.hedge-option.opposing::before { background:var(--green); }
+.hedge-option[data-strategy]:hover::before, .hedge-option[data-strategy]:focus-visible::before { animation:hedge-card-sweep .65s cubic-bezier(.16,1,.3,1) both; }
+@keyframes hedge-card-sweep { 0% { opacity:0; transform:skewX(-18deg) translateX(0); } 12% { opacity:.42; } 86% { opacity:.42; } 100% { opacity:0; transform:skewX(-18deg) translateX(820%); } }
+.hedge-option[data-strategy]:hover, .hedge-option[data-strategy]:focus-visible, .hedge-option.is-active { transform: translateY(-2px); outline: none; }
+.hedge-option.current[data-strategy]:hover, .hedge-option.current[data-strategy]:focus-visible, .hedge-option.current.is-active { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(239,118,94,.2),var(--shadow); }
+.hedge-option.balanced[data-strategy]:hover, .hedge-option.balanced[data-strategy]:focus-visible, .hedge-option.balanced.is-active { border-color: #69c99a; box-shadow: 0 0 0 3px rgba(105,201,154,.22),var(--shadow); }
+.hedge-option.balanced.recommended.is-active { border-color: #69c99a; box-shadow: 0 0 0 3px rgba(105,201,154,.22),var(--shadow); transform: translateY(-2px); }
+.hedge-option.opposing[data-strategy]:hover, .hedge-option.opposing[data-strategy]:focus-visible, .hedge-option.opposing.is-active { border-color: var(--green); box-shadow: 0 0 0 3px rgba(8,115,79,.2),var(--shadow); }
+.hedge-option.current { border-top: 4px solid var(--coral); }
+.hedge-option.balanced { border-top: 4px solid var(--mint); }
+.hedge-option.balanced.recommended { border: 1px solid var(--line); border-top: 4px solid var(--mint); box-shadow: var(--shadow); }
+.hedge-option.balanced .stake-label { color: #4eae7d; }
+.hedge-option.opposing { border-top: 4px solid var(--green); }
+.hedge-stake-result, .hedge-guarantee { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+.hedge-stake-result { margin-top:20px; padding-bottom:15px; border-bottom:1px solid var(--line); color:var(--muted); font:500 11px 'DM Mono',monospace; }
+.hedge-stake-result strong { color:var(--ink); font:800 25px Manrope,sans-serif; letter-spacing:-.04em; }
+.hedge-guarantee { display:grid; grid-template-columns:1fr auto; margin-top:16px; color:var(--muted); font-size:12px; }
+.hedge-guarantee strong { color:var(--green); font:800 23px Manrope,sans-serif; letter-spacing:-.04em; }
+.hedge-guarantee small { grid-column:1/-1; margin-top:5px; color:var(--muted); font:500 10px 'DM Mono',monospace; }
+.hedge-option.current .hedge-guarantee strong { color:var(--coral-ink); }
+.hedge-option.balanced .hedge-guarantee { position:relative; }
+.hedge-option.balanced .hedge-guarantee strong { color:var(--green); }
+.hedge-option.balanced .hedge-guarantee strong { position:relative; z-index:0; padding:0 5px; }
+.hedge-option.balanced .hedge-guarantee strong::before { content:''; position:absolute; z-index:-1; left:-3px; right:-3px; top:43%; height:58%; border-radius:48% 42% 52% 38%; background:var(--mint); transform:rotate(-2deg) skewX(-10deg); }
+.hedge-option.opposing .hedge-guarantee strong { color:var(--green); }
+.hedge-outcomes .potential { color:var(--coral-ink); }
+.hedge-option.opposing .hedge-outcomes .potential { color:var(--green); }
+.hedge-outcomes .potential b { color:inherit; }
+.hedge-outcomes .potential b { position:relative; z-index:0; padding:0 5px; }
+.hedge-outcomes .potential b::before { content:''; position:absolute; z-index:-1; left:-3px; right:-3px; top:43%; height:58%; border-radius:48% 42% 52% 38%; background:#ffd8cf; transform:rotate(-2deg) skewX(-10deg); }
+.hedge-option.opposing .hedge-outcomes .potential b::before { background:var(--mint); }
+.hedge-math { line-height: 1.8; }
+.hedge-chart-panel h2, .hedge-explainer h2 { margin: 0; font-size: 18px; letter-spacing: -.03em; }
+.hedge-chart-panel .section-heading, .hedge-explainer .section-heading { margin-bottom: 0; }
+.hedge-explainer { padding-top: 22px; padding-bottom: 22px; }
+@media (max-width:760px) { .hedge-chart-wrap { height: 18rem; margin-left: 0; margin-right: 0; } }

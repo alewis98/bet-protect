@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Explore hedge options for an open betting position." />
+    <title>Bet Protect — Hedge calculator</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell hedge-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">↗</span><span>bet protect</span></a><a class="tool-link" href="index.html">Arbitrage calculator ↗</a>
+      </header>
+      <section class="intro hedge-intro" aria-labelledby="hedge-title">
+        <div><h1 id="hedge-title">Protect your position<br /><em>without</em> guessing.</h1><p class="lede">See what happens if you hold, hedge evenly, or lean toward one result.</p></div>
+      </section>
+      <form id="hedge-form" class="hedge-form" novalidate>
+        <section class="hedge-input-grid panel" aria-label="Open position details">
+          <div class="section-heading"><div><h2>Your open position</h2></div><span class="muted">Required to compare outcomes</span></div>
+          <div class="hedge-fields">
+            <label class="field"><span>Current position stake</span><div class="input-prefix"><span>$</span><input id="position-stake" type="number" min="0" step="any" placeholder="0.00" /></div></label>
+            <label class="field"><span>Gross payout if it wins</span><div class="input-prefix"><span>$</span><input id="position-payout" type="number" min="0" step="any" placeholder="0.00" /></div></label>
+            <label class="field"><span>Current cashout value</span><div class="input-prefix"><span>$</span><input id="cashout-value" type="number" min="0" step="any" placeholder="0.00" /></div></label>
+            <label class="field"><span>Hedge position odds</span><input id="hedge-odds" type="text" inputmode="text" placeholder="e.g. +120 or 2.20" /></label>
+            <label class="field"><span>Odds format</span><select id="hedge-format"><option value="american">American</option><option value="decimal">Decimal</option></select></label>
+            <label class="field"><span>Max hedge stake</span><div class="input-prefix"><span>$</span><input id="max-hedge-stake" type="number" min="0.01" step="0.01" value="500" /></div></label>
+          </div>
+          <div class="form-actions"><button class="calculate-button" type="submit"><span>Calculate hedge options</span><span class="button-arrow" aria-hidden="true">→</span></button><button id="hedge-share-button" class="share-button" type="button">Copy share link</button><span id="hedge-share-status" class="share-status" role="status" aria-live="polite"></span></div>
+          <p id="hedge-error" class="error-message" role="alert" hidden></p>
+        </section>
+      </form>
+      <section id="hedge-results" class="hedge-results" aria-live="polite" hidden>
+        <div class="results-heading"><div><h2>Choose your balance</h2><p class="result-note">Each option shows the net result after the hedge stake.</p></div></div>
+        <div id="hedge-options" class="hedge-options"></div>
+        <div class="panel hedge-chart-panel"><div class="section-heading"><div><h2>Profit by hedge stake</h2></div><span class="muted">Hover for exact values</span></div><div class="hedge-chart-wrap"><canvas id="hedge-chart" aria-label="Line chart comparing profit for each outcome as hedge stake changes"></canvas></div></div>
+        <div class="panel hedge-explainer"><div class="section-heading"><div><h2>How the hedge is calculated</h2></div><span class="muted">At settlement</span></div><p id="hedge-math" class="hedge-math"></p></div>
+      </section>
+      <footer><span>BET PROTECT / HEDGE</span><span>No accounts · No tracking · Runs in your browser</span></footer>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="hedge.js"></script>
+  </body>
+</html>
