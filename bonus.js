@@ -1,0 +1,31 @@
+const $ = id => document.getElementById(id);
+const dollars = value => `$${value.toFixed(2)}`;
+const signedMoney = value => `${value < 0 ? '-' : '+'}$${Math.abs(value).toFixed(2)}`;
+const decimalOdds = (value, format) => format === 'decimal' ? value : value > 0 ? 1 + value / 100 : 1 + 100 / Math.abs(value);
+const profitMultiplier = (value, format) => decimalOdds(value, format) - 1;
+
+function renderOutcomeFields() {
+  const count = Number($('market-shape').value), format = $('bonus-format').value;
+  const hints = count === 3 ? ['Home / Team 1', 'Draw', 'Away / Team 2'] : ['Outcome A', 'Outcome B'];
+  $('bonus-outcomes').innerHTML = Array.from({length: count}, (_, index) => `<label class="field bonus-outcome"><span>Outcome ${String.fromCharCode(65 + index)}</span><input id="bonus-name-${index}" maxlength="80" placeholder="${hints[index]}" /><div class="bonus-odds-input"><input id="bonus-odds-${index}" type="text" inputmode="text" placeholder="${format === 'american' ? '+120' : '2.20'}" autocomplete="off" /></div></label>`).join('');
+}
+
+function calculate(data) {
+  const multipliers = data.odds.map(odds => profitMultiplier(odds, data.format));
+  const guaranteed = data.bonus / multipliers.reduce((sum, multiplier) => sum + 1 / multiplier, 0);
+  const allocations = multipliers.map(multiplier => guaranteed / multiplier);
+  return { guaranteed, rate: guaranteed / data.bonus * 100, allocations, multipliers };
+}
+
+function readData() { const count = Number($('market-shape').value); return { bonus: Number($('bonus-amount').value), format: $('bonus-format').value, names: Array.from({length: count}, (_, i) => $(`bonus-name-${i}`).value.trim() || `Outcome ${String.fromCharCode(65 + i)}`), odds: Array.from({length: count}, (_, i) => Number($(`bonus-odds-${i}`).value)) }; }
+function validate(data) { if (!Number.isFinite(data.bonus) || data.bonus <= 0) return 'Enter a bonus bet value greater than $0.'; if (data.odds.some(odds => !Number.isFinite(odds))) return 'Enter odds for every outcome.'; if (data.format === 'decimal' && data.odds.some(odds => odds <= 1)) return 'Decimal odds must be greater than 1.00.'; if (data.format === 'american' && data.odds.some(odds => odds === 0 || Math.abs(odds) < 100)) return 'American odds must be at least +100 or -100.'; if (data.odds.some(odds => profitMultiplier(odds, data.format) <= 0)) return 'Each outcome needs positive profit odds so the bonus can convert to cash.'; return ''; }
+function render(data, result) { $('bonus-results').hidden = false; $('guaranteed-cash').textContent = signedMoney(result.guaranteed); $('conversion-rate').textContent = `${result.rate.toFixed(2)}%`; $('result-bonus').textContent = dollars(data.bonus); $('bonus-result-grid').innerHTML = data.names.map((name, index) => `<article class="bonus-result-card"><span class="bonus-card-index">${String.fromCharCode(65 + index)}</span><div><h3>${name}</h3><p>${formatOdds(data.odds[index], data.format)} odds · ${result.multipliers[index].toFixed(3)} profit multiplier</p></div><div class="bonus-allocation"><small>Stake allocation</small><strong>${dollars(result.allocations[index])}</strong></div><div class="bonus-outcome-profit"><small>If ${name} wins</small><b>${signedMoney(result.guaranteed)}</b></div></article>`).join(''); const terms = result.multipliers.map(value => `1 ÷ ${value.toFixed(3)}`).join(' + '); $('bonus-math').innerHTML = `<p><strong>Profit multiplier</strong><br>American odds convert to profit-only multipliers: decimal odds − 1.</p><p><strong>Equal-profit allocation</strong><br>Guaranteed cash value = ${dollars(data.bonus)} ÷ (${terms}) = <strong>${signedMoney(result.guaranteed)}</strong>.</p><p>Each outcome receives guaranteed cash value ÷ its profit multiplier. The bonus stake itself is not returned, so the conversion rate is guaranteed cash value ÷ bonus value = <strong>${result.rate.toFixed(2)}%</strong>.</p>`; $('bonus-results').scrollIntoView({behavior:'smooth', block:'start'}); }
+function formatOdds(value, format) { return format === 'decimal' ? value.toFixed(2) : value > 0 ? `+${Math.round(value)}` : `${Math.round(value)}`; }
+$('market-shape').addEventListener('change', renderOutcomeFields); $('bonus-format').addEventListener('change', renderOutcomeFields); renderOutcomeFields();
+$('bonus-form').addEventListener('submit', event => { event.preventDefault(); const data = readData(), error = validate(data); $('bonus-error').hidden = !error; $('bonus-error').textContent = error; if (error) return; render(data, calculate(data)); });
+$('bonus-reset').addEventListener('click', () => { $('bonus-amount').value = ''; $('market-shape').value = '2'; $('bonus-format').value = 'american'; renderOutcomeFields(); $('bonus-results').hidden = true; $('bonus-error').hidden = true; });
+const shareFieldIds = ['bonus-amount', 'market-shape', 'bonus-format'];
+function shareUrl() { const state = {...Object.fromEntries(shareFieldIds.map(id => [id, $(id).value]))}; const count = Number($('market-shape').value); state.outcomes = Array.from({length: count}, (_, index) => ({name: $(`bonus-name-${index}`).value, odds: $(`bonus-odds-${index}`).value})); return `${window.location.href.split('#')[0]}#share=${encodeURIComponent(JSON.stringify(state))}`; }
+function restoreShareState() { const match = window.location.hash.match(/^#share=(.+)$/); if (!match) return; try { const state = JSON.parse(decodeURIComponent(match[1])); shareFieldIds.forEach(id => { if (Object.prototype.hasOwnProperty.call(state, id)) $(id).value = state[id]; }); renderOutcomeFields(); (state.outcomes || []).forEach((outcome, index) => { if ($(`bonus-name-${index}`)) $(`bonus-name-${index}`).value = outcome.name || ''; if ($(`bonus-odds-${index}`)) $(`bonus-odds-${index}`).value = outcome.odds || ''; }); } catch { /* Ignore malformed share links. */ } }
+$('bonus-share-button').addEventListener('click', async () => { const url = shareUrl(), status = $('bonus-share-status'); try { await navigator.clipboard.writeText(url); status.textContent = 'Share link copied'; } catch { status.textContent = `Copy this link: ${url}`; } window.history.replaceState(null, '', url); window.setTimeout(() => { status.textContent = ''; }, 5000); });
+restoreShareState();

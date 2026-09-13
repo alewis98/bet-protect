@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Maximize the conversion of a bonus bet across two-way and three-way markets." />
+    <title>Bet Protect — Bonus bet converter</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell bonus-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">↗</span><span>bet protect</span></a>
+        <nav class="tool-nav" aria-label="Tools"><a href="index.html">Arbitrage</a><a href="hedge.html">Hedge</a><a class="active" href="bonus.html" aria-current="page">Bonus converter</a></nav>
+      </header>
+      <section class="intro bonus-intro" aria-labelledby="bonus-title">
+        <div><h1 id="bonus-title">Turn a bonus bet<br /><em>into cash.</em></h1><p class="lede">Split a free bet across every outcome and find the highest guaranteed conversion.</p></div>
+      </section>
+      <form id="bonus-form" class="bonus-form" novalidate>
+        <section class="panel bonus-input-panel" aria-label="Bonus bet details">
+          <div class="section-heading"><div><h2>Set up your bonus bet</h2><p class="muted">Use odds from one market at the same sportsbook.</p></div><span class="muted">No stake returned</span></div>
+          <div class="bonus-controls">
+            <label class="field"><span>Bonus bet value</span><div class="input-prefix"><span>$</span><input id="bonus-amount" type="number" min="0.01" step="0.01" placeholder="100.00" required /></div></label>
+            <label class="field"><span>Market shape</span><select id="market-shape"><option value="2">2-way market</option><option value="3">3-way market</option></select></label>
+            <label class="field"><span>Odds format</span><select id="bonus-format"><option value="american">American</option><option value="decimal">Decimal</option></select></label>
+          </div>
+          <div id="bonus-outcomes" class="bonus-outcomes"></div>
+          <div class="form-actions"><button class="calculate-button" type="submit"><span>Calculate conversion</span><span class="button-arrow" aria-hidden="true">→</span></button><button id="bonus-share-button" class="share-button" type="button">Copy share link</button><button id="bonus-reset" class="bonus-reset-button" type="button">Reset values</button><span id="bonus-share-status" class="share-status" role="status" aria-live="polite"></span><span id="bonus-error" class="share-status error-message" role="alert" aria-live="polite" hidden></span></div>
+        </section>
+      </form>
+      <section id="bonus-results" class="bonus-results" aria-live="polite" hidden>
+        <div class="results-heading"><div><h2>Conversion plan</h2><p id="bonus-result-note" class="result-note">The allocation equalizes your net profit whichever outcome wins.</p></div><span class="result-badge">GUARANTEED CONVERSION</span></div>
+        <div class="bonus-hero panel"><div><span class="eyebrow">GUARANTEED CASH VALUE</span><strong id="guaranteed-cash">+$0.00</strong></div><div class="bonus-hero-stats"><span><small>Conversion rate</small><b id="conversion-rate">0.00%</b></span><span><small>Bonus value</small><b id="result-bonus">$0.00</b></span></div></div>
+        <div id="bonus-result-grid" class="bonus-result-grid"></div>
+        <details class="panel bonus-explainer"><summary><strong>How the conversion is calculated</strong><span class="muted">Math details</span><span class="disclosure-icon" aria-hidden="true"></span></summary><div id="bonus-math" class="bonus-math"></div></details>
+      </section>
+      <footer><span>BET PROTECT / BONUS CONVERTER</span><span>No accounts · No tracking · Runs in your browser</span></footer>
+    </main>
+    <script src="bonus.js"></script>
+  </body>
+</html>
