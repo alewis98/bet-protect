@@ -214,3 +214,6 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 :is([data-theme="dark"], :root:not([data-theme="light"])) .add-market:hover { background:#1b3027; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .reset-book:hover { background:#402a25; color:#ffab93; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .remove-market:hover { background:#402a25; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .mode-toggle-track { background:#30483d; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .mode-toggle.is-protect .mode-toggle-track { background:#5a342c; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .calculate-button:hover { background:#176b4b; color:#fff; }
