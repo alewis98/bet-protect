@@ -115,6 +115,11 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 .hedge-outcomes .potential b::before { content:''; position:absolute; z-index:-1; left:-3px; right:-3px; top:43%; height:58%; border-radius:48% 42% 52% 38%; background:#ffd8cf; transform:rotate(-2deg) skewX(-10deg); }
 .hedge-option.opposing .hedge-outcomes .potential b::before { background:var(--mint); }
 .custom-stake-card { display:grid; grid-template-columns:1.2fr repeat(3,1fr); gap:12px; margin-top:18px; padding:14px 16px; border-top:1px solid var(--line); background:#f5f8f4; }
+.selected-stake-card { margin-top:18px; }
+.selected-stake-card + .custom-stake-card { margin-top:0; }
+.selected-stake-card.current { background:#fff7f4; }
+.selected-stake-card.balanced { background:#f2faf5; }
+.selected-stake-card.opposing { background:#f2f7f3; }
 .custom-stake-card > div { display:grid; gap:5px; }
 .custom-stake-card span { color:var(--muted); font:500 10px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; }
 .custom-stake-card strong { color:var(--ink); font:800 22px Manrope,sans-serif; letter-spacing:-.04em; }
@@ -226,5 +231,16 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 :is([data-theme="dark"], :root:not([data-theme="light"])) select:focus { background:#1b3027; box-shadow:0 0 0 3px rgba(113,212,168,.22); }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .market-name input { background:#172b22; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .error-message { border-color:#73453a; background:#35231f; color:#ffb09a; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing::before { background:#fff; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing .hedge-outcomes .potential,
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing .hedge-outcomes .potential b { color:#fff; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing .hedge-outcomes .potential b::before { background:#fff; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing[data-strategy]:hover,
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing[data-strategy]:focus-visible,
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing.is-active { border-color:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.18),var(--shadow); }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing .hedge-outcomes .potential b::before { background:rgba(255,255,255,.2); }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .selected-stake-card.current { background:#35231f; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .selected-stake-card.balanced { background:#1b3027; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .selected-stake-card.opposing { background:#26342d; }
 .hedge-option .stake-label { font-size:15px; }
 .hedge-guarantee strong::before,.hedge-outcomes .potential b::before { top:33%; }
