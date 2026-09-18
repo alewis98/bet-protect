@@ -119,7 +119,8 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 .custom-stake-card span { color:var(--muted); font:500 10px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; }
 .custom-stake-card strong { color:var(--ink); font:800 22px Manrope,sans-serif; letter-spacing:-.04em; }
 .custom-stake-card em { color:var(--green); font:600 10px 'DM Mono',monospace; font-style:normal; text-transform:uppercase; letter-spacing:.04em; }
-.custom-stake-card b { color:var(--green); font:700 13px 'DM Mono',monospace; }
+.custom-stake-card b { color:var(--green); font:800 22px Manrope,sans-serif; letter-spacing:-.04em; }
+.custom-stake-card b.negative { color:var(--coral-ink); }
 .custom-stake-warning { display:block; margin-top:4px; color:var(--coral-ink); font:600 11px 'DM Mono',monospace; }
 @media (max-width:760px) { .custom-stake-card { grid-template-columns:1fr 1fr; }.custom-stake-warning { grid-column:1/-1; grid-row:auto; } }
 .hedge-math { line-height: 1.8; }
