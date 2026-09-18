@@ -8,9 +8,11 @@ html { scroll-behavior:smooth; }
 body { margin:0; color:var(--ink); background:var(--paper); font-family:'DM Sans',system-ui,sans-serif; }
 body::before { content:''; position:fixed; inset:0; pointer-events:none; opacity:.32; background:#eef2ec; clip-path:inset(0 0 99.7% 0); }
 .shell { position:relative; max-width:1180px; margin:auto; padding:0 32px 44px; }
+[hidden] { display:none !important; }
 .topbar { height:86px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
 .brand { display:flex; align-items:center; gap:10px; color:var(--ink); text-decoration:none; font-weight:700; letter-spacing:-.03em; font-size:17px; }
 .tool-link { color:var(--green); text-decoration:none; font:500 11px 'DM Mono',monospace; }.tool-link:hover { color:var(--coral-ink); }
+.error-message { display:flex; align-items:flex-start; gap:10px; margin:16px 0 0; padding:12px 14px; border:1px solid #e8b8a8; border-radius:8px; background:#fff4ef; color:#8f432f; font:600 12px/1.45 'DM Sans',sans-serif; }.error-message::before { content:'!'; display:grid; place-items:center; width:18px; height:18px; flex:none; border:1.5px solid currentColor; border-radius:50%; font:800 12px/1 Manrope,sans-serif; }.form-actions .error-message { grid-column:1/-1; margin:2px 0 0; }.hedge-input-grid > .error-message { margin:18px 0 0; }.bonus-input-panel .error-message { margin:2px 0 0; }
 .theme-toggle { display:inline-flex; align-items:center; gap:7px; padding:7px 9px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--muted); cursor:pointer; font:500 10px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; transition:color .18s,border-color .18s,background .18s,transform .18s; }.theme-toggle:hover,.theme-toggle:focus-visible { color:var(--green); border-color:var(--green); transform:translateY(-1px); outline:none; }.theme-toggle-icon { display:grid; place-items:center; width:14px; height:14px; flex:none; }.theme-toggle-icon svg { display:block; width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
 [data-theme="dark"] input,[data-theme="dark"] select { background:#12221b; color:var(--ink); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) input, :root:not([data-theme="light"]) select { background:#12221b; color:var(--ink); } }
@@ -220,3 +222,4 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 :is([data-theme="dark"], :root:not([data-theme="light"])) input:focus,
 :is([data-theme="dark"], :root:not([data-theme="light"])) select:focus { background:#1b3027; box-shadow:0 0 0 3px rgba(113,212,168,.22); }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .market-name input { background:#172b22; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .error-message { border-color:#73453a; background:#35231f; color:#ffb09a; }
