@@ -212,7 +212,7 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 :is([data-theme="dark"], :root:not([data-theme="light"])) .boosted-value,
 :is([data-theme="dark"], :root:not([data-theme="light"])) .boost-math { background:#214536; color:#9fe0bd !important; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .outcomes-settings .boosted-preview { background:#1b3027; color:#b2c9bb; }
-:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-math-card { background:#12221b; }.hedge-math-target { background:#1b3027; border-color:#3d7059; }
+:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-math-card { background:#12221b; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .pairing-row:hover { background:#1b3027; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .pairing-row.selected { background:#214536; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .badge,
@@ -234,7 +234,6 @@ footer { display:flex; justify-content:space-between; gap:20px; padding-top:80px
 :is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing::before { background:#fff; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing .hedge-outcomes .potential,
 :is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing .hedge-outcomes .potential b { color:#fff; }
-:is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing .hedge-outcomes .potential b::before { background:#fff; }
 :is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing[data-strategy]:hover,
 :is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing[data-strategy]:focus-visible,
 :is([data-theme="dark"], :root:not([data-theme="light"])) .hedge-option.opposing.is-active { border-color:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.18),var(--shadow); }

@@ -1,8 +1,10 @@
 (() => {
   const key = 'bet-protect-theme';
   const root = document.documentElement;
+  const systemPreference = matchMedia('(prefers-color-scheme: dark)');
   const saved = localStorage.getItem(key);
   if (saved === 'light' || saved === 'dark') root.dataset.theme = saved;
+  else root.dataset.theme = systemPreference.matches ? 'dark' : 'light';
   const mode = () => localStorage.getItem(key) || 'system';
   const update = button => {
     const current = mode();
@@ -17,11 +19,11 @@
     update(button);
     button.addEventListener('click', () => {
       const next = {system:'light',light:'dark',dark:'system'}[mode()];
-      if (next === 'system') { root.removeAttribute('data-theme'); localStorage.setItem(key, 'system'); }
+      if (next === 'system') { root.dataset.theme = systemPreference.matches ? 'dark' : 'light'; localStorage.setItem(key, 'system'); }
       else { root.dataset.theme = next; localStorage.setItem(key, next); }
       update(button);
       dispatchEvent(new Event('themechange'));
     });
-    matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { if (mode() === 'system') { update(button); dispatchEvent(new Event('themechange')); } });
+    systemPreference.addEventListener?.('change', () => { if (mode() === 'system') { root.dataset.theme = systemPreference.matches ? 'dark' : 'light'; update(button); dispatchEvent(new Event('themechange')); } });
   });
 })();
