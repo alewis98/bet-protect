@@ -20,7 +20,8 @@
       if (next === 'system') { root.removeAttribute('data-theme'); localStorage.setItem(key, 'system'); }
       else { root.dataset.theme = next; localStorage.setItem(key, next); }
       update(button);
+      dispatchEvent(new Event('themechange'));
     });
-    matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { if (mode() === 'system') update(button); });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { if (mode() === 'system') { update(button); dispatchEvent(new Event('themechange')); } });
   });
 })();

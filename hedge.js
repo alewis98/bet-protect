@@ -1,5 +1,7 @@
 const $ = id => document.getElementById(id);
 let hedgeChart;
+let lastChartData;
+let lastChartResult;
 const shareFieldIds = ['position-stake', 'position-payout', 'cashout-value', 'hedge-odds', 'hedge-format', 'max-hedge-stake'];
 const dollars = value => `$${value.toFixed(2)}`;
 const signedMoney = value => `${value < 0 ? '-' : '+'}$${Math.abs(value).toFixed(2)}`;
@@ -22,7 +24,7 @@ function optimize(data) {
 function renderChart(data, result) {
   if (hedgeChart) hedgeChart.destroy();
   const dark = document.documentElement.dataset.theme === 'dark' || (!document.documentElement.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
-  const chartInk = dark ? '#edf5ef' : '#263c35', chartMuted = dark ? '#a9bdb1' : '#687870', chartGrid = dark ? '#30483d' : '#dfe6e0', hedgeMarker = dark ? '#ffffff' : '#263c35';
+  const chartInk = dark ? '#edf5ef' : '#17211d', chartMuted = dark ? '#a9bdb1' : '#687870', chartGrid = dark ? '#30483d' : '#dfe6e0', hedgeMarker = dark ? '#ffffff' : '#263c35';
   const allValues = result.points.flatMap(point => [point.currentProfit, point.opposingProfit, result.targetProfit]);
   const min = Math.min(...allValues), max = Math.max(...allValues), padding = Math.max((max - min) * 0.12, 1);
   const marker = (row, color, label, strategyKey) => row ? { label, strategyKey, data: [{ x: row.hedgeStake, y: min - padding }, { x: row.hedgeStake, y: max + padding }], borderColor: color, borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, parsing: false } : null;
@@ -38,11 +40,11 @@ function renderChart(data, result) {
 }
 
 function renderOptions(data, result) {
-  const choices = [{ key: 'current', label: 'Position-favored stake', detail: 'Smallest hedge that still reaches the target.', tone: 'quiet' }, { key: 'balanced', label: 'Neutral stake', detail: 'Closest profit between both outcomes.', tone: 'recommended' }, { key: 'opposing', label: 'Hedge-favored stake', detail: 'Largest hedge that still reaches the target.', tone: 'lean' }];
+  const choices = [{ key: 'current', label: 'Position-favored stake', detail: 'Smallest hedge that still reaches the cashout baseline.', tone: 'quiet' }, { key: 'balanced', label: 'Neutral stake', detail: 'Closest profit between both outcomes above the cashout baseline.', tone: 'recommended' }, { key: 'opposing', label: 'Hedge-favored stake', detail: 'Largest hedge that still reaches the cashout baseline.', tone: 'lean' }];
   $('hedge-options').innerHTML = choices.map(choice => { const row = result.strategies[choice.key]; const guaranteed = row ? Math.min(row.currentProfit, row.opposingProfit) : null; return `<article class="hedge-option ${choice.tone} ${choice.key} ${row ? '' : 'unavailable'}" data-strategy="${choice.key}" tabindex="${row ? '0' : '-1'}" role="button" aria-pressed="true"><div class="hedge-option-head"><div><span class="stake-label">${choice.label}</span><p>${choice.detail}</p></div></div>${row ? `<div class="hedge-stake-result"><span>Stake required</span><strong>${dollars(row.hedgeStake)}</strong></div><div class="hedge-guarantee"><span>Guaranteed net profit</span><strong>${signedMoney(guaranteed)}</strong><small>${guaranteed >= result.targetProfit ? `Exceeds current cashout by ${dollars(guaranteed - result.targetProfit)}` : 'Below current cashout'}</small></div><div class="hedge-outcomes"><span class="${choice.key === 'current' ? 'potential' : ''}">Position wins <b>${signedMoney(row.currentProfit)}</b></span><span class="${choice.key === 'opposing' ? 'potential' : ''}">Hedge wins <b>${signedMoney(row.opposingProfit)}</b></span></div>` : '<p class="muted">No stake in the allowed range satisfies both outcomes.</p>'}</article>`; }).join('');
   const decimal = decimalOdds(data.odds, data.format);
-  $('hedge-math').innerHTML = `<strong>Target profit</strong><br>Cashout value ${dollars(data.cashout)} − position stake ${dollars(data.stake)} = <strong>${signedMoney(result.targetProfit)}</strong><br><br><strong>At any hedge stake H</strong><br>Position wins: ${dollars(data.payout)} − ${dollars(data.stake)} − H<br>Hedge position wins: H × (${decimal.toFixed(3)} − 1) − ${dollars(data.stake)}<br><br>We test each cent from $0 to ${dollars(data.maxHedgeStake)} and keep only stakes where both profits meet the target.`;
-  $('hedge-results').hidden = false; renderChart(data, result);
+  $('hedge-math').innerHTML = `<div class="hedge-math-grid"><article class="hedge-math-card"><span>Cashout baseline</span><strong>${signedMoney(result.targetProfit)}</strong><p>Cashout value ${dollars(data.cashout)} − position stake ${dollars(data.stake)}</p></article><article class="hedge-math-card"><span>Position wins</span><code>Payout ${dollars(data.payout)} − position stake ${dollars(data.stake)} − hedge stake H</code><p>Original payout after both stakes are accounted for.</p></article><article class="hedge-math-card"><span>Hedge wins</span><code>H × (hedge odds ${decimal.toFixed(3)} − 1) − position stake ${dollars(data.stake)}</code><p>Hedge return after the original position stake.</p></article></div><p class="hedge-math-note">We test each cent from $0 to ${dollars(data.maxHedgeStake)} and keep stakes where both outcomes exceed the cashout baseline.</p>`;
+  $('hedge-results').hidden = false; lastChartData = data; lastChartResult = result; renderChart(data, result);
   const setMarkerVisible = (key, visible) => { const dataset = hedgeChart.data.datasets.find(item => item.strategyKey === key); if (dataset) { dataset.hidden = !visible; hedgeChart.update(); } };
   document.querySelectorAll('[data-strategy]').forEach(card => { const key = card.dataset.strategy; if (!result.strategies[key]) return; card.addEventListener('mouseenter', () => setMarkerVisible(key, true)); card.addEventListener('mouseleave', () => setMarkerVisible(key, card.getAttribute('aria-pressed') === 'true')); card.addEventListener('click', () => { const cards = [...document.querySelectorAll('[data-strategy]')], oneSelected = cards.filter(item => item.getAttribute('aria-pressed') === 'true').length === 1 && card.getAttribute('aria-pressed') === 'true'; cards.forEach(other => { const visible = oneSelected || other === card; other.setAttribute('aria-pressed', String(visible)); other.classList.toggle('is-active', !oneSelected && visible); if (result.strategies[other.dataset.strategy]) setMarkerVisible(other.dataset.strategy, visible); }); }); card.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); card.click(); } }); });
 }
@@ -69,3 +71,10 @@ $('hedge-share-button').addEventListener('click', async () => {
   window.history.replaceState(null, '', url); window.setTimeout(() => { status.textContent = ''; }, 5000);
 });
 restoreShareState();
+
+addEventListener('themechange', () => {
+  if (lastChartData && lastChartResult) renderChart(lastChartData, lastChartResult);
+});
+
+function syncMaxHedgeStakeToPayout() { const payout = readNumber('position-payout'); if (payout !== null && payout > 0) $('max-hedge-stake').value = (payout * 1.1).toFixed(2); }
+['input', 'change'].forEach(eventName => $('position-payout').addEventListener(eventName, syncMaxHedgeStakeToPayout));
